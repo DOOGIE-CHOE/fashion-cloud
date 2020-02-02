@@ -1,6 +1,9 @@
 const NodeCache = require('node-cache');
 const fp = require('lodash/fp');
 
+const errorHandler = require('./errorHandler');
+const code = require('../config/code');
+
 class Cache {
   constructor(ttlSeconds) {
     this.cache = new NodeCache({ stdTTL: ttlSeconds, checkperiod: ttlSeconds * 0.2, useClones: false });
@@ -38,15 +41,20 @@ class Cache {
       console.log('Cache hit');
       return Promise.resolve(value);
     }
-    return storeFunction().then((result) => {
-      console.log('Cache miss');
-      this.cache.set(result, result);
-      const data = {
-        key: result,
-        isNew: true,
-      };
-      return Promise.resolve(data);
-    });
+    if (value && storeFunction) {
+      return storeFunction().then((result) => {
+        console.log('Cache miss');
+        this.cache.set(result, result);
+        const data = {
+          key: result,
+          isNew: true,
+        };
+        return Promise.resolve(data);
+      });
+    } else {
+      // when cache does not exists for POST and PUT
+      throw errorHandler.createError(code.ERROR_CODE.NOT_FOUND);
+    }
   }
 
   getAll() {
