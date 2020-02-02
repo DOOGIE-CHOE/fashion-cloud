@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
   res.send('hello world');
 });
 
-router.get('/all', (req, res) => {
+router.get('/cache/all', (req, res) => {
   cache.getAll().then((value) => {
     res.json(value);
   });
@@ -51,6 +51,35 @@ router.post('/:id', (req, res) => {
       }
       res.json({ result: 1 });
     });
+  });
+});
+
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  cache.get(id).then((value) => {
+    const data = req.body;
+    data.key = id;
+    Products.updateOne({ key: value }, { $set: data }, (err) => {
+      if (err) {
+        console.error(err);
+        res.json({ result: 0 });
+      }
+      res.json({ result: 1 });
+    });
+  });
+});
+
+
+router.delete('/cache/all', (req, res) => {
+  cache.flush().then((value) => {
+    if (value) res.json({ result: 1 });
+  });
+});
+
+router.delete('/cache/:id', (req, res) => {
+  const { id } = req.params;
+  cache.delete(id).then((value) => {
+    if (value) res.json({ result: 1 });
   });
 });
 

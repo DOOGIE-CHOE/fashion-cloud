@@ -24,16 +24,18 @@ class Cache {
   }
 
   getAll() {
-    const keys = fp.map((value) => value.v.id, this.cache.data);
+    const keys = fp.map((value) => value.v, this.cache.data);
     return Promise.resolve(keys);
   }
 
-  del(keys) {
+  delete(keys) {
     this.cache.del(keys);
+    return Promise.resolve(true);
   }
 
   flush() {
     this.cache.flushAll();
+    return Promise.resolve(true);
   }
 }
 
