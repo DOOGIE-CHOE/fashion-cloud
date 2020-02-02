@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 const code = require('../../config/code');
 const CacheService = require('../../core/cache');
+const common = require('../../core/common');
 
 const Products = mongoose.model('Products');
 const router = express.Router();
@@ -31,9 +32,7 @@ router.get('/:id', (req, res) => {
     if (value && value.isNew) {
       res.json(value.key);
     } else {
-      Products.find({ key: value }).then((result) => {
-        res.json(result);
-      });
+      common.find(Products, { key: value }, (result) => res.json(result));
     }
   });
 });
@@ -49,7 +48,7 @@ router.post('/:id', (req, res) => {
         console.error(err);
         res.json({ result: 0 });
       }
-      res.json({ result: 1 });
+      common.find(Products, { key: value }, (result) => res.json(result));
     });
   });
 });
@@ -64,7 +63,7 @@ router.put('/:id', (req, res) => {
         console.error(err);
         res.json({ result: 0 });
       }
-      res.json({ result: 1 });
+      common.find(Products, { key: value }, (result) => res.json(result));
     });
   });
 });
