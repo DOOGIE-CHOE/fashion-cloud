@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const mongoose = require('mongoose');
+const errorHandler = require('./core/errorHandler');
+const code = require('./config/code');
 
 // [CONFIGURE APP TO USE bodyParser]
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,9 +23,7 @@ app.use(require('./routes'));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  next(errorHandler.createError(code.ERROR_CODE.NOT_FOUND));
 });
 
 app.listen(port, () => {
