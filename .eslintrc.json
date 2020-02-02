@@ -4,6 +4,9 @@
         "func-names": ["error", "never"],
         "max-len": ["error", { "code": 250 }],
         "no-use-before-define": "off",
-        "operator-linebreak": "off"
+        "operator-linebreak": "off",
+        "no-console": "off",
+        "no-param-reassign": "off",
+        "no-unused-expressions": "off"
     }
 }
