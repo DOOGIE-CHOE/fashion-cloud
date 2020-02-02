@@ -1,4 +1,5 @@
 const NodeCache = require('node-cache');
+const fp = require('lodash/fp');
 
 class Cache {
   constructor(ttlSeconds) {
@@ -11,12 +12,20 @@ class Cache {
       console.log('Cache hit');
       return Promise.resolve(value);
     }
-
     return storeFunction().then((result) => {
       console.log('Cache miss');
-      this.cache.set(result.id, result);
-      return result;
+      this.cache.set(result, result);
+      const data = {
+        key: result,
+        isNew: true,
+      };
+      return Promise.resolve(data);
     });
+  }
+
+  getAll() {
+    const keys = fp.map((value) => value.v.id, this.cache.data);
+    return Promise.resolve(keys);
   }
 
   del(keys) {
