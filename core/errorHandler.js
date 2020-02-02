@@ -1,3 +1,8 @@
+/**
+ * Here, I added only 404 for example
+ * We can add up more status/error codes in the future
+ */
+
 const code = require('../config/code');
 
 const errorHandler = {};

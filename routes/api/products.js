@@ -1,8 +1,11 @@
+/**
+ * I named APIs "product" to provide more clear API path
+ */
+
 const express = require('express');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 
-const code = require('../../config/code');
 const CacheService = require('../../core/cache');
 const common = require('../../core/common');
 
@@ -11,10 +14,6 @@ const router = express.Router();
 
 const ttl = 60 * 60;
 const cache = new CacheService(ttl);
-
-router.get('/', (req, res) => {
-  res.send('hello world');
-});
 
 router.get('/cache/all', (req, res) => {
   cache.getAll().then((value) => {
