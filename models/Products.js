@@ -1,8 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+
+const { Schema } = mongoose;
 
 const productSchema = new Schema({
-  title: String,
+  key: String,
+  data: Object,
 });
 
 mongoose.model('Products', productSchema);
